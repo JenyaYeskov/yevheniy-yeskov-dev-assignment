@@ -2,27 +2,29 @@ import transactionsService from "../services/transactionsService.js";
 
 class Controller {
     async handleTransaction(req, res) {
+        let results = [];
+
         for (const transaction of req.body) {
-            let type = transaction.type.toLowerCase().trim()
+            let type = transaction.type.toLowerCase().trim();
 
             if (type === "deposit") {
-                res.send(await transactionsService.deposit())
+                results.push(await transactionsService.deposit(transaction));
             }
 
             if (type === "withdraw") {
-                res.send(await transactionsService.withdraw())
+                results.push(await transactionsService.withdraw(transaction));
             }
 
             if (type === "buy") {
-                res.send(await transactionsService.buy())
+                results.push(await transactionsService.buy(transaction));
             }
 
             if (type === "sell") {
-                res.send(await transactionsService.sell())
+                results.push(await transactionsService.sell(transaction));
             }
-
-            res.send("error")
         }
+
+        res.send(results);
     }
 }
 
