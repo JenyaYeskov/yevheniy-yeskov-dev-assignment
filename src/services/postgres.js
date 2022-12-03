@@ -22,6 +22,10 @@ class Postgres {
     async saveToLogs(data) {
 
     }
+
+    async saveToAccounts(data) {
+
+    }
 }
 
 export default new Postgres();
