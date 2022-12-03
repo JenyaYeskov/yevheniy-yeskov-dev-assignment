@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-
+import "dotenv/config"
+import mainRouter from "./routes/mainRouter.js";
 
 const app = express();
 
