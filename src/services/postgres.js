@@ -18,6 +18,10 @@ class Postgres {
 
         return result.rows[0];
     }
+
+    async saveToLogs(data) {
+
+    }
 }
 
 export default new Postgres();
