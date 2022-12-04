@@ -15,14 +15,10 @@ class TransactionsService {
         partyData.money = Number(partyData.money) + amount;
         counterPartyData.money = Number(counterPartyData.money) - amount;
 
+        let transaction = await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time);
 
-        partyData = await postgres.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
-        counterPartyData = await postgres.saveToAccounts([counterPartyData.money, counterPartyData.assets, counterPartyData.accId]);
-
-        let transaction = await postgres.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
-
-        await postgres.saveToLogs([party, partyData.money, partyData.assets, transaction.transId, time]);
-        await postgres.saveToLogs([counterParty, counterPartyData.money, counterPartyData.assets, transaction.transId, time]);
+        await this.#saveUpdatesToAccounts(partyData, counterPartyData);
+        await this.#saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
 
         return ("done");
     }
