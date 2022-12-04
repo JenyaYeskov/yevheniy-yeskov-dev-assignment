@@ -55,9 +55,21 @@ class TransactionsService {
         amount = Number(amount);
         let time = new Date().toLocaleString();
         let total = amount * price;
-        let time = new Date().toLocaleString();
 
-        return (await postgres.saveToTransactions([type, party, counterParty, assetType, amount, price, total, time]));
+        let partyData = await this.#getAccountData(party);
+        let counterPartyData = await this.#getAccountData(counterParty);
+
+        partyData.money = Number(partyData.money) - total;
+        counterPartyData.money = Number(counterPartyData.money) + total;
+
+        [partyData.assets, counterPartyData.assets] = this.#processAssetsUpdate(partyData, counterPartyData, assetType, amount);
+
+        let transaction = await db.saveToTransactions([type, party, counterParty, assetType, amount, price, total, time]);
+
+        await this.#saveUpdatesToAccounts(partyData, counterPartyData);
+        await this.#saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
+
+        return ("done");
     }
 
     async sell(transaction) {
