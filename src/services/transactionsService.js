@@ -6,6 +6,7 @@ let hstore = new Hstore();
 class TransactionsService {
     async deposit(data) {
         let {type, party, counterParty, assetType, amount} = data;
+        amount = Number(amount);
         let time = new Date().toLocaleString();
 
         let partyData = await this.#getAccountData(party);
@@ -53,9 +54,10 @@ class TransactionsService {
 
     }
 
-    async buy(transaction) {
-        let {type, party, counterParty, assetType, amount, price} = transaction;
-
+    async buy(data) {
+        let {type, party, counterParty, assetType, amount, price} = data;
+        amount = Number(amount);
+        let time = new Date().toLocaleString();
         let total = amount * price;
         let time = new Date().toLocaleString();
 
