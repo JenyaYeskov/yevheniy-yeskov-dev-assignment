@@ -5,16 +5,8 @@ class TransactionsService {
         let {type, party, counterParty, assetType, amount} = data;
         let time = new Date().toLocaleString();
 
-        let partyData = await postgres.getAccountData(party);
-        let counterPartyData = await postgres.getAccountData(counterParty);
-
-        if (!partyData){
-            partyData = await postgres.createNewAccount([party, 0]);
-        }
-
-        if (!counterPartyData){
-            counterPartyData = await postgres.createNewAccount([counterParty, 0]);
-        }
+        let partyData = await this.#getAccountData(party);
+        let counterPartyData = await this.#getAccountData(counterParty);
 
         partyData.money = Number(partyData.money) + amount;
         counterPartyData.money = Number(counterPartyData.money) - amount;
@@ -29,6 +21,15 @@ class TransactionsService {
         await postgres.saveToLogs([counterParty, counterPartyData.money, counterPartyData.assets, transaction.transId, time]);
 
         return ("done");
+    }
+
+    async #getAccountData(party) {
+        let data = await postgres.getAccountData(party);
+
+        if (!data) {
+            data = await postgres.createNewAccount([party, 0]);
+        }
+        return data;
     }
 
     async withdraw(transaction) {
