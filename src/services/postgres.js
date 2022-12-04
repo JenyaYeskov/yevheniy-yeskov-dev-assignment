@@ -44,7 +44,13 @@ class Postgres {
         return result.rows[0];
     }
 
+    async createNewAccount(data) {
+        let queryString = `insert into accounts (name,money) values ($1, $2) RETURNING *`;
 
+        let result = await pool.query(queryString, data);
+
+        return result.rows[0];
+    }
 }
 
 export default new Postgres();
