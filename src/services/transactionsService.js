@@ -26,6 +26,9 @@ class TransactionsService {
         return ("done");
     }
 
+    async #saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time) {
+        return await db.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
+    }
 
 
     async #saveUpdatesToAccounts(partyData, counterPartyData) {
