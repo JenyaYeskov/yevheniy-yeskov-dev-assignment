@@ -1,9 +1,8 @@
 import postgres from "./postgres.js";
 
 class TransactionsService {
-    async deposit(transaction) {
-        let {type, party, counterParty, assetType, amount} = transaction;
-
+    async deposit(data) {
+        let {type, party, counterParty, assetType, amount} = data;
         let time = new Date().toLocaleString();
 
         let partyData = await postgres.getAccountData(party);
@@ -16,6 +15,9 @@ class TransactionsService {
         if (!counterPartyData){
             counterPartyData = await postgres.createNewAccount([counterParty, 0]);
         }
+
+        partyData.money = Number(partyData.money) + amount;
+        counterPartyData.money = Number(counterPartyData.money) - amount;
 
 
         return ("done");
