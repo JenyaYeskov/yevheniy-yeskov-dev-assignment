@@ -35,6 +35,16 @@ class Postgres {
 
         return result.rows[0];
     }
+
+    async getAccountData(data) {
+        let queryString = `select * from accounts where name = $1`;
+
+        let result = await pool.query(queryString, [data]);
+
+        return result.rows[0];
+    }
+
+
 }
 
 export default new Postgres();
