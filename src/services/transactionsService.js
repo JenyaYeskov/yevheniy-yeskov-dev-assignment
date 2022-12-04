@@ -20,6 +20,10 @@ class TransactionsService {
         counterPartyData.money = Number(counterPartyData.money) - amount;
 
 
+        partyData = await postgres.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
+        counterPartyData = await postgres.saveToAccounts([counterPartyData.money, counterPartyData.assets, counterPartyData.accId]);
+
+
         return ("done");
     }
 
