@@ -29,7 +29,11 @@ class Postgres {
     }
 
     async saveToAccounts(data) {
+        let queryString = `UPDATE accounts SET money = $1, assets = $2 WHERE "accId" = $3 RETURNING *`;
 
+        let result = await pool.query(queryString, data);
+
+        return result.rows[0];
     }
 }
 
