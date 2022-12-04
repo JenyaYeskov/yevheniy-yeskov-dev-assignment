@@ -1,4 +1,7 @@
-import postgres from "./postgres.js";
+import db from "./postgres.js";
+import Hstore from "pg-hstore";
+
+let hstore = new Hstore();
 
 class TransactionsService {
     async deposit(data) {
@@ -21,6 +24,13 @@ class TransactionsService {
         await postgres.saveToLogs([counterParty, counterPartyData.money, counterPartyData.assets, transaction.transId, time]);
 
         return ("done");
+    }
+
+
+
+    async #saveUpdatesToAccounts(partyData, counterPartyData) {
+        await db.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
+        await db.saveToAccounts([counterPartyData.money, counterPartyData.assets, counterPartyData.accId]);
     }
 
     async #getAccountData(party) {
