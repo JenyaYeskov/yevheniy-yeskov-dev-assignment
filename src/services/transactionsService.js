@@ -42,10 +42,10 @@ class TransactionsService {
     }
 
     async #getAccountData(party) {
-        let data = await postgres.getAccountData(party);
+        let data = await db.getAccountData(party);
 
         if (!data) {
-            data = await postgres.createNewAccount([party, 0]);
+            data = await db.createNewAccount([party, 0]);
         }
         return data;
     }
