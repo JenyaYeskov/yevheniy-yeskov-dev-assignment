@@ -30,6 +30,10 @@ class TransactionsService {
         return await db.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
     }
 
+    async #saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData) {
+        await db.saveToLogs([party, partyData.money, partyData.assets, transaction.transId, time]);
+        await db.saveToLogs([counterParty, counterPartyData.money, counterPartyData.assets, transaction.transId, time]);
+    }
 
     async #saveUpdatesToAccounts(partyData, counterPartyData) {
         await db.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
