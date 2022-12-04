@@ -85,7 +85,19 @@ class TransactionsService {
         return [partyAssets, counterPartyAssets];
     }
 
+    #getAssetsObject(partyData, assetType) {
+        let assetsObj = {};
 
+        if (partyData.assets) {
+            assetsObj = hstore.parse(partyData.assets);
+        }
+
+        if (!assetsObj[assetType]) {
+            assetsObj[assetType] = 0;
+        }
+
+        return assetsObj;
+    }
 
     async sell(transaction) {
 
