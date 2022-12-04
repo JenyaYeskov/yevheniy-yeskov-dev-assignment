@@ -72,6 +72,21 @@ class TransactionsService {
         return ("done");
     }
 
+    #processAssetsUpdate(partyData, counterPartyData, assetType, amount) {
+        let partyAssets = this.#getAssetsObject(partyData, assetType);
+        let counterPartyAssets = this.#getAssetsObject(counterPartyData, assetType);
+
+        partyAssets[assetType] = Number(partyAssets[assetType]) + amount;
+        counterPartyAssets[assetType] = Number(counterPartyAssets[assetType] - amount);
+
+        partyAssets = hstore.stringify(partyAssets);
+        counterPartyAssets = hstore.stringify(counterPartyAssets);
+
+        return [partyAssets, counterPartyAssets];
+    }
+
+
+
     async sell(transaction) {
 
     }
