@@ -23,6 +23,8 @@ class TransactionsService {
         partyData = await postgres.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
         counterPartyData = await postgres.saveToAccounts([counterPartyData.money, counterPartyData.assets, counterPartyData.accId]);
 
+        let transaction = await postgres.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
+
 
         return ("done");
     }
