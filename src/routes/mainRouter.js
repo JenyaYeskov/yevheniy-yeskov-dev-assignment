@@ -3,6 +3,8 @@ import controller from "../controllers/controller.js";
 
 const router = express.Router();
 
-router.post("/transactions", controller.handleTransaction)
+router.post("/transactions", controller.handleTransaction);
+
+router.post("/logs", controller.handleTransaction);
 
 export default router;
