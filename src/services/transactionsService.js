@@ -6,18 +6,17 @@ let hstore = new Hstore();
 class TransactionsService {
     async depositOrWithdraw(data) {
         let {type, party, counterParty, assetType, amount} = data;
-        amount = Number(amount);
         let time = new Date().toLocaleString();
 
         let partyData = await this.#getAccountData(party);
         let counterPartyData = await this.#getAccountData(counterParty);
 
         if (type.toLowerCase().trim() === "deposit") {
-            partyData.money = Number(partyData.money) + amount;
-            counterPartyData.money = Number(counterPartyData.money) - amount;
+            partyData.money = Number(partyData.money) + Number(amount);
+            counterPartyData.money = Number(counterPartyData.money) - Number(amount);
         } else {
-            partyData.money = Number(partyData.money) - amount;
-            counterPartyData.money = Number(counterPartyData.money) + amount;
+            partyData.money = Number(partyData.money) - Number(amount);
+            counterPartyData.money = Number(counterPartyData.money) + Number(amount);
         }
 
         await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time);
@@ -53,7 +52,6 @@ class TransactionsService {
 
     async buyOrSell(data) {
         let {type, party, counterParty, assetType, amount, price} = data;
-        amount = Number(amount);
         let time = new Date().toLocaleString();
         let total = amount * price;
 
@@ -82,11 +80,11 @@ class TransactionsService {
         let counterPartyAssets = this.#getAssetsObject(counterPartyData, assetType);
 
         if (type.toLowerCase().trim() === "buy") {
-            partyAssets[assetType] = Number(partyAssets[assetType]) + amount;
-            counterPartyAssets[assetType] = Number(counterPartyAssets[assetType] - amount);
+            partyAssets[assetType] = Number(partyAssets[assetType]) + Number(amount);
+            counterPartyAssets[assetType] = Number(counterPartyAssets[assetType]) - Number(amount);
         } else {
-            partyAssets[assetType] = Number(partyAssets[assetType]) - amount;
-            counterPartyAssets[assetType] = Number(counterPartyAssets[assetType] + amount);
+            partyAssets[assetType] = Number(partyAssets[assetType]) - Number(amount);
+            counterPartyAssets[assetType] = Number(counterPartyAssets[assetType]) + Number(amount);
         }
 
         partyAssets = hstore.stringify(partyAssets);
