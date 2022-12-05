@@ -23,7 +23,7 @@ class TransactionsService {
         let transaction = await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time);
 
         await this.#saveUpdatesToAccounts(partyData, counterPartyData);
-        await this.#saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
+        await this.#saveUpdatesToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
 
         return ("done");
     }
@@ -41,7 +41,7 @@ class TransactionsService {
         return await db.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
     }
 
-    async #saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData) {
+    async #saveUpdatesToLogs(party, partyData, transaction, time, counterParty, counterPartyData) {
         await db.saveToLogs([party, partyData.money, partyData.assets, transaction.transId, time]);
         await db.saveToLogs([counterParty, counterPartyData.money, counterPartyData.assets, transaction.transId, time]);
     }
@@ -49,19 +49,6 @@ class TransactionsService {
     async #saveUpdatesToAccounts(partyData, counterPartyData) {
         await db.saveToAccounts([partyData.money, partyData.assets, partyData.accId]);
         await db.saveToAccounts([counterPartyData.money, counterPartyData.assets, counterPartyData.accId]);
-    }
-
-    async #getAccountData(party) {
-        let data = await db.getAccountData(party);
-
-        if (!data) {
-            data = await db.createNewAccount([party, 0]);
-        }
-        return data;
-    }
-
-    async withdraw(transaction) {
-
     }
 
 
@@ -87,12 +74,12 @@ class TransactionsService {
         let transaction = await db.saveToTransactions([type, party, counterParty, assetType, amount, price, total, time]);
 
         await this.#saveUpdatesToAccounts(partyData, counterPartyData);
-        await this.#saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
+        await this.#saveUpdatesToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
 
         return ("done");
     }
 
-    #processAssetsUpdate(partyData, counterPartyData, assetType, amount) {
+    #processAssetsUpdate(partyData, counterPartyData, assetType, amount, type) {
         let partyAssets = this.#getAssetsObject(partyData, assetType);
         let counterPartyAssets = this.#getAssetsObject(counterPartyData, assetType);
 
@@ -122,10 +109,6 @@ class TransactionsService {
         }
 
         return assetsObj;
-    }
-
-    async sell(transaction) {
-
     }
 }
 
