@@ -5,15 +5,15 @@ let hstore = new Hstore();
 
 class LogsService {
     async getBelongings(data) {
-        let result = await db.getPersonLogByDate(data.name, data.timestamp);
+        let personData = await db.getPersonLogByDate(data.name, data.timestamp);
 
-        if (!result[0]) {
+        if (!personData[0]) {
             return;
         }
 
-        let latest = result[result.length - 1];
+        let latest = personData[personData.length - 1];
 
-        for (const log of result) {
+        for (const log of personData) {
             if (log.timestamp > latest.timestamp) {
                 latest = log.timestamp;
             }
