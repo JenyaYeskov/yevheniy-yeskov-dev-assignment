@@ -20,8 +20,8 @@ class Postgres {
     }
 
     async saveToLogs(data) {
-        let queryString = `insert into logs (name, money, assets, "transId", timestamp) 
-                            values ($1, $2, $3, $4, $5) RETURNING *`;
+        let queryString = `insert into logs (name, money, assets, timestamp) 
+                            values ($1, $2, $3, $4) RETURNING *`;
 
         let result = await pool.query(queryString, data);
 
