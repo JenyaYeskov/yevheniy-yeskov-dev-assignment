@@ -1,5 +1,6 @@
 import transactionsService from "../services/transactionsService.js";
 import logsService from "../services/logsService.js";
+import ApiError from "../Errors/apiError.js";
 
 class Controller {
     async handleTransaction(req, res, next) {
@@ -11,11 +12,15 @@ class Controller {
 
                 if (type === "deposit" || type === "withdraw") {
                     results.push(await transactionsService.depositOrWithdraw(transaction));
+                    continue;
                 }
 
                 if (type === "buy" || type === "sell") {
                     results.push(await transactionsService.buyOrSell(transaction));
+                    continue;
                 }
+
+                throw new ApiError(400, `Wrong input. There is no ${type} transaction`);
             }
 
             res.send(results);
