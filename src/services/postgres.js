@@ -51,6 +51,14 @@ class Postgres {
 
         return result.rows[0];
     }
+
+    async getPersonLogByDate(name, timestamp) {
+        let queryString = `SELECT * FROM logs WHERE name = $1 AND timestamp::text LIKE ($2)`;
+
+        let result = await pool.query(queryString, [name, `${timestamp}%`]);
+
+        return result.rows;
+    }
 }
 
 export default new Postgres();
