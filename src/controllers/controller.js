@@ -1,4 +1,5 @@
 import transactionsService from "../services/transactionsService.js";
+import logsService from "../services/logsService.js";
 
 class Controller {
     async handleTransaction(req, res) {
@@ -25,6 +26,10 @@ class Controller {
         }
 
         res.send(results);
+    }
+
+    async handleLog(req, res) {
+        res.send(await logsService.getBelongings(req.body));
     }
 }
 

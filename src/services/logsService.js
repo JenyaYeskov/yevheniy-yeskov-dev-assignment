@@ -6,4 +6,4 @@ class LogsService {
     }
 }
 
-export default new TransactionsService();
+export default new LogsService();
