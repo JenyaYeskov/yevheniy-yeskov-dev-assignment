@@ -4,7 +4,7 @@ import Hstore from "pg-hstore";
 let hstore = new Hstore();
 
 class TransactionsService {
-    async deposit(data) {
+    async depositOrWithdraw(data) {
         let {type, party, counterParty, assetType, amount} = data;
         amount = Number(amount);
         let time = new Date().toLocaleString();
@@ -12,8 +12,13 @@ class TransactionsService {
         let partyData = await this.#getAccountData(party);
         let counterPartyData = await this.#getAccountData(counterParty);
 
-        partyData.money = Number(partyData.money) + amount;
-        counterPartyData.money = Number(counterPartyData.money) - amount;
+        if (type.toLowerCase().trim() === "deposit") {
+            partyData.money = Number(partyData.money) + amount;
+            counterPartyData.money = Number(counterPartyData.money) - amount;
+        } else {
+            partyData.money = Number(partyData.money) - amount;
+            counterPartyData.money = Number(counterPartyData.money) + amount;
+        }
 
         let transaction = await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time);
 
@@ -21,6 +26,15 @@ class TransactionsService {
         await this.#saveUpdatedToLogs(party, partyData, transaction, time, counterParty, counterPartyData);
 
         return ("done");
+    }
+
+    async #getAccountData(party) {
+        let data = await db.getAccountData(party);
+
+        if (!data) {
+            data = await db.createNewAccount([party, 0]);
+        }
+        return data;
     }
 
     async #saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time) {
