@@ -8,6 +8,14 @@ class LogsDb {
 
         return result.rows;
     }
+
+    async getPersonLog(name) {
+        let queryString = `SELECT * FROM logs WHERE name = $1`;
+
+        let result = await pool.query(queryString, [name]);
+
+        return result.rows;
+    }
 }
 
 export default new LogsDb();
