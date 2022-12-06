@@ -18,12 +18,15 @@ class TransactionsService {
             partyData.money = Number(partyData.money) - Number(amount);
             counterPartyData.money = Number(counterPartyData.money) + Number(amount);
         }
-
-        await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time);
-        await this.#saveUpdatesToAccounts(partyData, counterPartyData);
-        await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
+        await this.#saveUpdatesToDb(type, party, counterParty, assetType, amount, time, partyData, counterPartyData);
 
         return (data);
+    }
+
+    async #saveUpdatesToDb(type, party, counterParty, assetType, amount, time, partyData, counterPartyData, price = 0, total = amount) {
+        await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time, price, total);
+        await this.#saveUpdatesToAccounts(partyData, counterPartyData);
+        await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
     }
 
     async #getAccountData(party) {
@@ -35,8 +38,8 @@ class TransactionsService {
         return data;
     }
 
-    async #saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time) {
-        return await db.saveToTransactions([type, party, counterParty, assetType, amount, 0, amount, time]);
+    async #saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time, price, total) {
+        return await db.saveToTransactions([type, party, counterParty, assetType, amount, price, total, time]);
     }
 
     async #saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData) {
@@ -68,9 +71,7 @@ class TransactionsService {
 
         [partyData.assets, counterPartyData.assets] = this.#processAssetsUpdate(partyData, counterPartyData, assetType, amount, type);
 
-        await db.saveToTransactions([type, party, counterParty, assetType, amount, price, total, time]);
-        await this.#saveUpdatesToAccounts(partyData, counterPartyData);
-        await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
+        await this.#saveUpdatesToDb(type, party, counterParty, assetType, amount, time, partyData, counterPartyData, price, total);
 
         return (data);
     }
