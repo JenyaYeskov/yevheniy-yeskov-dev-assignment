@@ -2,8 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import "dotenv/config"
 import mainRouter from "./routes/mainRouter.js";
-import errorHandler from "./Errors/errorHandler.js"
-import ApiError from "./Errors/apiError.js";
+import errorHandler from "./errors/errorHandler.js"
+import ApiError from "./errors/apiError.js";
 
 const app = express();
 

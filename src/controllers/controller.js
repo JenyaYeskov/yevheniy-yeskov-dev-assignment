@@ -1,6 +1,7 @@
 import transactionsService from "../services/transactionsService.js";
 import logsService from "../services/logsService.js";
-import ApiError from "../Errors/apiError.js";
+import ApiError from "../errors/apiError.js";
+import displayData from "../services/displayData.js";
 
 class Controller {
     async handleTransaction(req, res, next) {
