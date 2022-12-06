@@ -1,15 +1,6 @@
-import pg from "pg";
-import "dotenv/config";
+import pool from "./connection.js";
 
-const pool = new pg.Pool({
-    user: process.env.postgresUser,
-    host: process.env.postgresHost,
-    database: process.env.postgresDatabase,
-    password: process.env.postgresPassword,
-    port: process.env.postgresPort
-})
-
-class Postgres {
+class TransactionsDb {
     async saveToTransactions(data) {
         let queryString = `insert into transactions (type, party, "counterParty", "assetType", amount, price, total, timestamp) 
                             values ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
@@ -51,14 +42,6 @@ class Postgres {
 
         return result.rows[0];
     }
-
-    async getPersonLogByDate(name, timestamp) {
-        let queryString = `SELECT * FROM logs WHERE name = $1 AND timestamp::text LIKE ($2)`;
-
-        let result = await pool.query(queryString, [name, `${timestamp}%`]);
-
-        return result.rows;
-    }
 }
 
-export default new Postgres();
+export default new TransactionsDb();
