@@ -23,7 +23,7 @@ class TransactionsService {
         await this.#saveUpdatesToAccounts(partyData, counterPartyData);
         await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
 
-        return (`${party} ${type} ${amount} ${counterParty} - DONE`);
+        return (data);
     }
 
     async #getAccountData(party) {
@@ -72,7 +72,7 @@ class TransactionsService {
         await this.#saveUpdatesToAccounts(partyData, counterPartyData);
         await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
 
-        return (`${party} ${type} ${amount} ${assetType} ${price} ${counterParty} - DONE`);
+        return (data);
     }
 
     #processAssetsUpdate(partyData, counterPartyData, assetType, amount, type) {
