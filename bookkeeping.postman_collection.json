@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "b3255d47-4267-43d5-81d0-ead6827371dd",
+		"name": "bookkeeping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4660119"
+	},
+	"item": [
+		{
+			"name": "deposit, withdraw, buy, sell",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\": \"DEPOSIT\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"money\",\r\n        \"amount\": 200,\r\n        \"price\": \"\"\r\n    },\r\n    {\r\n        \"type\": \"WITHDRAW\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"money\",\r\n        \"amount\": 200,\r\n        \"price\": \"\"\r\n    },\r\n    {\r\n        \"type\": \"BUY\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"APPL\",\r\n        \"amount\": 3,\r\n        \"price\": 100\r\n    },\r\n    {\r\n        \"type\": \"SELL\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"APPL\",\r\n        \"amount\": 2,\r\n        \"price\": 120\r\n    }\r\n]"
+				},
+				"url": {
+					"raw": "http://localhost:8888/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single deposit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\": \"DEPOSIT\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"money\",\r\n        \"amount\": 200,\r\n        \"price\": \"\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single withdraw",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\": \"WITHDRAW\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"money\",\r\n        \"amount\": 200,\r\n        \"price\": \"\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single buy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\": \"BUY\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"APPL\",\r\n        \"amount\": 3,\r\n        \"price\": 100\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single sell",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"type\": \"SELL\",\r\n        \"party\": \"Person-A\",\r\n        \"counterParty\": \"Person-B\",\r\n        \"assetType\": \"APPL\",\r\n        \"amount\": 1,\r\n        \"price\": 10000\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "log",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Person-A\",\r\n    \"timestamp\": \"2022-12-06\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/logs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"logs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
