@@ -1,4 +1,4 @@
-import db from "./postgres.js";
+import db from "../db/transactionsDb.js";
 import Hstore from "pg-hstore";
 
 let hstore = new Hstore();
