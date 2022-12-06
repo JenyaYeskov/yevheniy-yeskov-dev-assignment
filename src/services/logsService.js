@@ -24,23 +24,18 @@ class LogsService {
             timestampTo.setMilliseconds(timestampTo.getMilliseconds() - 1);
         }
 
-        let previous = [];
+        let latest = personData[0];
 
+        // Log id check is required because there are can be multiple transactions made at the same second.
+        // "logId" field has "serial" type, so bigger id means the latest log.
         for (const log of personData) {
-            if (timestampTo >= log.timestamp) {
-                previous.push(log);
+            if (log.timestamp <= timestampTo) {
+                if (log.timestamp >= latest.timestamp && log.logId > latest.logId)
+                    latest = log;
             }
         }
 
-        let latestToDate = previous[previous.length - 1];
-
-        for (const log of previous) {
-            if (log.timestamp > latestToDate.timestamp) {
-                latestToDate = log;
-            }
-        }
-
-        return latestToDate;
+        return latest;
     }
 }
 
