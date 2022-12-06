@@ -5,18 +5,30 @@ class LogsService {
         let personData = await db.getPersonLogByDate(data.name, data.timestamp);
 
         if (!personData[0]) {
+            personData = await db.getPersonLog(data.name);
+        }
+
+        if (!personData[0]) {
             return;
         }
 
         let latest = personData[personData.length - 1];
 
         for (const log of personData) {
-            if (log.timestamp > latest.timestamp) {
-                latest = log;
+            if (timestampTo >= log.timestamp) {
+                previous.push(log);
             }
         }
 
-        return latest;
+        let latestToDate = previous[previous.length - 1];
+
+        for (const log of previous) {
+            if (log.timestamp > latestToDate.timestamp) {
+                latestToDate = log;
+            }
+        }
+
+        return latestToDate;
     }
 }
 
