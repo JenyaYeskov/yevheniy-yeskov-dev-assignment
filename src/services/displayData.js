@@ -21,8 +21,8 @@ class DisplayData {
             return ;
         }
 
-        let assets = "";
         let hstore = new Hstore();
+        let assets = "";
 
         if (data.assets) {
             data.assets = hstore.parse(data.assets);

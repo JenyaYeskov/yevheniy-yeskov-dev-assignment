@@ -4,6 +4,10 @@ import Hstore from "pg-hstore";
 let hstore = new Hstore();
 
 class TransactionsService {
+    // Processes deposit and withdraw operations.
+    // Withdraw is the opposite direction of a deposit,
+    // so both of them can be handled the same way,
+    // and the direction defines according to the type of the transaction.
     async depositOrWithdraw(data) {
         let {type, party, counterParty, assetType, amount} = data;
         let time = new Date().toLocaleString();
@@ -11,6 +15,7 @@ class TransactionsService {
         let partyData = await this.#getAccountData(party);
         let counterPartyData = await this.#getAccountData(counterParty);
 
+        // Defining direction of the operation, and calculating changes of money amount of the account.
         if (type.toLowerCase().trim() === "deposit") {
             partyData.money = Number(partyData.money) + Number(amount);
             counterPartyData.money = Number(counterPartyData.money) - Number(amount);
@@ -18,17 +23,20 @@ class TransactionsService {
             partyData.money = Number(partyData.money) - Number(amount);
             counterPartyData.money = Number(counterPartyData.money) + Number(amount);
         }
+
         await this.#saveUpdatesToDb(type, party, counterParty, assetType, amount, time, partyData, counterPartyData);
 
         return (data);
     }
 
+    // Updating 3 db tables (accounts, transactions, logs).
     async #saveUpdatesToDb(type, party, counterParty, assetType, amount, time, partyData, counterPartyData, price = 0, total = amount) {
         await this.#saveUpdatesToTransactions(type, party, counterParty, assetType, amount, time, price, total);
         await this.#saveUpdatesToAccounts(partyData, counterPartyData);
         await this.#saveUpdatesToLogs(party, partyData, time, counterParty, counterPartyData);
     }
 
+    // Retrieving of the account information, or creating new account if account does not exist.
     async #getAccountData(party) {
         let data = await db.getAccountData(party);
 
@@ -53,6 +61,10 @@ class TransactionsService {
     }
 
 
+    //Processes buy and sell operations.
+    // Buy is the opposite direction of a sell,
+    // so both of them can be handled the same way,
+    // and the direction defines according to the type of the transaction.
     async buyOrSell(data) {
         let {type, party, counterParty, assetType, amount, price} = data;
         let time = new Date().toLocaleString();
@@ -61,6 +73,7 @@ class TransactionsService {
         let partyData = await this.#getAccountData(party);
         let counterPartyData = await this.#getAccountData(counterParty);
 
+        // Defining direction of the operation, and calculating changes of money amount of the account.
         if (type.toLowerCase().trim() === "buy") {
             partyData.money = Number(partyData.money) - total;
             counterPartyData.money = Number(counterPartyData.money) + total;
@@ -76,10 +89,12 @@ class TransactionsService {
         return (data);
     }
 
+    // Calculation of changes in assets, that are stored in hstore format.
     #processAssetsUpdate(partyData, counterPartyData, assetType, amount, type) {
         let partyAssets = this.#getAssetsObject(partyData, assetType);
         let counterPartyAssets = this.#getAssetsObject(counterPartyData, assetType);
 
+        // Defining direction of the operation, and calculating changes of the assets of the account.
         if (type.toLowerCase().trim() === "buy") {
             partyAssets[assetType] = Number(partyAssets[assetType]) + Number(amount);
             counterPartyAssets[assetType] = Number(counterPartyAssets[assetType]) - Number(amount);
