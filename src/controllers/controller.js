@@ -24,7 +24,7 @@ class Controller {
                 throw new ApiError(400, `Wrong input. There is no ${type} transaction`);
             }
 
-            res.send(results);
+            res.send(displayData.displayTransactions(results));
         } catch (err) {
             next(err);
         }
@@ -32,7 +32,7 @@ class Controller {
 
     async handleLog(req, res, next) {
         try {
-            res.send(await logsService.getBelongings(req.body));
+            res.send(displayData.displayLog( await logsService.getBelongings(req.body) ));
         } catch (err) {
             next(err);
         }
